@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Classroom App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vc.css" />
+  <script src="https://kit.fontawesome.com/a2d042a1f7.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- Splash / Landing -->
+  <section id="splash" class="screen visible">
+    <div class="splash-card glass">
+      <i class="fa-solid fa-chalkboard-user logo"></i>
+      <h1>Virtual Classroom</h1>
+      <p class="tag">Fast, simple, role-based classroom app.</p>
+      <button id="enterBtn" class="btn primary"><i class="fa-solid fa-arrow-right"></i> Enter</button>
+    </div>
+  </section>
+
+  <!-- Login Screen -->
+  <section id="login" class="screen">
+    <div class="auth-card glass">
+      <h2><i class="fa-solid fa-right-to-bracket"></i> Log in</h2>
+      <label for="name">Your Name</label>
+      <input id="name" type="text" placeholder="e.g., Rohini" />
+      <label for="role">Role</label>
+      <select id="role">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+      <div class="row">
+        <button id="loginBtn" class="btn primary"><i class="fa-solid fa-door-open"></i> Continue</button>
+        <button id="backToSplash" class="btn ghost"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      </div>
+      <p class="hint"><i class="fa-solid fa-circle-info"></i> No password needed. Data is saved in your browser only.</p>
+    </div>
+  </section>
+
+  <!-- Topbar -->
+  <header id="topbar" class="hidden">
+    <div class="brand">
+      <i class="fa-solid fa-chalkboard"></i>
+      <span>Virtual Classroom</span>
+    </div>
+    <div class="user">
+      <span id="userBadge"></span>
+      <button id="logoutBtn" class="btn small danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </header>
+
+  <!-- Teacher Dashboard -->
+  <main id="teacherApp" class="screen">
+    <aside class="sidebar">
+      <button class="navbtn" data-view="t-home"><i class="fa-solid fa-house"></i> Home</button>
+      <button class="navbtn" data-view="t-new"><i class="fa-solid fa-plus"></i> New Assignment</button>
+      <button class="navbtn" data-view="t-list"><i class="fa-solid fa-list"></i> All Assignments</button>
+
+      <!-- NEW: materials / quizzes / announcements / forum -->
+      <button class="navbtn" data-view="t-materials"><i class="fa-solid fa-file"></i> Materials</button>
+      <button class="navbtn" data-view="t-quizzes"><i class="fa-solid fa-question"></i> Quizzes</button>
+      <button class="navbtn" data-view="t-announcements"><i class="fa-solid fa-bullhorn"></i> Announcements</button>
+      <button class="navbtn" data-view="t-forum"><i class="fa-solid fa-comments"></i> Forum</button>
+
+      <button class="navbtn" data-view="t-submissions"><i class="fa-solid fa-inbox"></i> Submissions</button>
+      <button class="navbtn" data-view="t-grades"><i class="fa-solid fa-clipboard-check"></i> Grades</button>
+      <button class="navbtn ghost" data-view="back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    </aside>
+    <section class="workspace">
+      <div id="t-home" class="view visible">
+        <h2>Welcome, <span class="who"></span> 👋</h2>
+        <p>Use the sidebar to create and manage assignments, review submissions, and assign grades.</p>
+        <div class="stats" id="tStats"></div>
+      </div>
+
+      <div id="t-new" class="view">
+        <h2>Create Assignment</h2>
+        <form id="assignmentForm" class="card">
+          <label>Title</label>
+          <input type="text" id="aTitle" placeholder="e.g., Graph Algorithms Sheet" required />
+          <label>Description</label>
+          <textarea id="aDesc" rows="4" placeholder="What should students do?" required></textarea>
+          <label>Deadline</label>
+          <input type="date" id="aDue" required />
+          <label>Attach PDF</label>
+          <input type="file" id="aFile" accept="application/pdf" />
+          <div class="row">
+            <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Assign</button>
+            <button type="reset" class="btn ghost"><i class="fa-solid fa-broom"></i> Clear</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="t-list" class="view">
+        <h2>All Assignments</h2>
+        <div id="assignmentList" class="grid"></div>
+      </div>
+
+      <!-- NEW: Materials -->
+      <div id="t-materials" class="view">
+        <h2>Upload Materials / Notes</h2>
+        <form id="materialForm" class="card">
+          <label>Title</label>
+          <input type="text" id="mTitle" placeholder="Material title" required />
+          <label>File (PDF/DOC/PPT)</label>
+          <input type="file" id="mFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" />
+          <div class="row">
+            <button class="btn primary" type="submit"><i class="fa-solid fa-upload"></i> Upload</button>
+          </div>
+        </form>
+        <h3>All Materials</h3>
+        <div id="materialList" class="grid"></div>
+      </div>
+
+      <!-- NEW: Quizzes -->
+      <div id="t-quizzes" class="view">
+        <h2>Create Quiz (single question)</h2>
+        <form id="quizForm" class="card">
+          <label>Question</label>
+          <input type="text" id="qQuestion" placeholder="Question text" required />
+          <label>Options (comma separated)</label>
+          <input type="text" id="qOptions" placeholder="Option1, Option2, Option3" required />
+          <label>Correct option (exact text)</label>
+          <input type="text" id="qAnswer" placeholder="Exact option text" required />
+          <div class="row">
+            <button class="btn primary" type="submit"><i class="fa-solid fa-plus"></i> Add Question</button>
+          </div>
+        </form>
+        <h3>All Quizzes</h3>
+        <div id="quizList" class="grid"></div>
+      </div>
+
+      <!-- NEW: Announcements -->
+      <div id="t-announcements" class="view">
+        <h2>Post Announcement</h2>
+        <form id="announcementForm" class="card">
+          <label>Title</label>
+          <input type="text" id="annTitle" placeholder="Title" required />
+          <label>Message</label>
+          <textarea id="annText" rows="3" placeholder="Write announcement..." required></textarea>
+          <div class="row">
+            <button class="btn primary" type="submit"><i class="fa-solid fa-bullhorn"></i> Post</button>
+          </div>
+        </form>
+        <h3>All Announcements</h3>
+        <div id="announcementList" class="grid"></div>
+      </div>
+
+      <!-- NEW: Forum -->
+      <div id="t-forum" class="view">
+        <h2>Discussion Forum</h2>
+        <form id="forumForm" class="card">
+          <label>Message</label>
+          <input type="text" id="fMsg" placeholder="Write something..." required />
+          <div class="row">
+            <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Post</button>
+          </div>
+        </form>
+        <h3>All Posts</h3>
+        <div id="forumList" class="grid"></div>
+      </div>
+
+      <div id="t-submissions" class="view">
+        <h2>Submissions</h2>
+        <div id="submissionList" class="grid"></div>
+      </div>
+
+      <div id="t-grades" class="view">
+        <h2>Grades</h2>
+        <div id="gradesList" class="grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Student Dashboard -->
+  <main id="studentApp" class="screen">
+    <aside class="sidebar">
+      <button class="navbtn" data-view="s-home"><i class="fa-solid fa-house"></i> Home</button>
+      <button class="navbtn" data-view="s-assignments"><i class="fa-solid fa-book-open"></i> Assignments</button>
+      <button class="navbtn" data-view="s-materials"><i class="fa-solid fa-file"></i> Materials</button>
+      <button class="navbtn" data-view="s-quizzes"><i class="fa-solid fa-question"></i> Quizzes</button>
+      <button class="navbtn" data-view="s-announcements"><i class="fa-solid fa-bullhorn"></i> Announcements</button>
+      <button class="navbtn" data-view="s-forum"><i class="fa-solid fa-comments"></i> Forum</button>
+      <button class="navbtn" data-view="s-grades"><i class="fa-solid fa-clipboard-check"></i> My Grades</button>
+      <button class="navbtn ghost" data-view="back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    </aside>
+    <section class="workspace">
+      <div id="s-home" class="view visible">
+        <h2>Hi, <span class="who"></span> 🎒</h2>
+        <p>Submit your work as PDFs before the deadline. You can delete and resubmit anytime before grading.</p>
+        <div class="stats" id="sStats"></div>
+      </div>
+
+      <div id="s-assignments" class="view">
+        <h2>Assignments</h2>
+        <div id="studentAssignmentList" class="grid"></div>
+      </div>
+
+      <!-- NEW: student materials -->
+      <div id="s-materials" class="view">
+        <h2>Materials</h2>
+        <div id="studentMaterialList" class="grid"></div>
+      </div>
+
+      <!-- NEW: student quizzes -->
+      <div id="s-quizzes" class="view">
+        <h2>Quizzes</h2>
+        <div id="studentQuizList" class="grid"></div>
+      </div>
+
+      <!-- NEW: student announcements -->
+      <div id="s-announcements" class="view">
+        <h2>Announcements</h2>
+        <div id="studentAnnouncementList" class="grid"></div>
+      </div>
+
+      <!-- NEW: student forum -->
+      <div id="s-forum" class="view">
+        <h2>Forum</h2>
+        <form id="sForumForm" class="card">
+          <input type="text" id="sfMsg" placeholder="Write a message..." required />
+          <div class="row">
+            <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Post</button>
+          </div>
+        </form>
+        <div id="studentForumList" class="grid"></div>
+      </div>
+
+      <div id="s-grades" class="view">
+        <h2>My Grades</h2>
+        <div id="studentGrades" class="grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="credit">
+    <span>© 2025 Virtual Classroom • Built for resume-ready major project</span>
+  </footer>
+
+  <script src="vc.js"></script>
+</body>
+</html>
