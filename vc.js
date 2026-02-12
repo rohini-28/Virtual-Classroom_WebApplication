@@ -1,7 +1,4 @@
-// vc.js - Full-featured Virtual Classroom (complete)
-// Drop this file in place of your existing vc.js
-// Features: login/logout, assignments, materials, quizzes, announcements, forum, submissions, grades
-// Includes delete for announcements and forum posts (teacher can delete any; users can delete their own forum posts)
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
